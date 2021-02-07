@@ -1,0 +1,43 @@
+# -*- coding: utf-8 -*-
+
+import json
+
+from flask import Flask, request, make_response, jsonify
+
+app = Flask(__name__)
+
+@app.route('/keyboard')
+def Keyboard():
+    dataSend = {
+        "type" : "buttons",
+        "buttons" : ["무새랑 대화하기", "도움말"]
+    }
+    return jsonify(dataSend)
+
+@app.route('/message', methods=['POST'])
+def Message():
+    dataReceive = request.get_json()
+    content = dataReceive['content']
+    if content == u"무새랑 대화하기":
+        dataSend = {
+            "message": {
+                "text" : "아무거나 입력해주세요"
+            }
+        }
+    elif content == u"도움말":
+        dataSend = {
+            "message": {
+                "text": "말을 따라하는 앵무새봇"
+            }
+        }
+    else: dataSend = {
+        "message": {
+            "text": content 
+            }
+        }
+    return jsonify(dataSend)
+
+if __name__ == "__main__": 
+    app.run(host='0.0.0.0', port = 5000)
+
+
